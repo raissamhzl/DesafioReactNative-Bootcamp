@@ -1,9 +1,11 @@
 import { ThemeProvider } from "styled-components";
 import { StatusBar } from "expo-status-bar";
 
-import theme from "./src/global/styles/theme";
+import { NavigationContainer } from '@react-navigation/native';
 
-import { BemVindoScreen, ListaScreen, DetalhesScreen } from "./src/screens";
+import theme from "./src/global/styles/theme";
+import { Routes } from "./src/screens/routes/routes";
+
 
 export default function App() {
   return (
@@ -12,8 +14,10 @@ export default function App() {
         style="auto"
         backgroundColor={theme.colors.background.primary}
       />
+      <NavigationContainer>
+      <Routes />
+      </NavigationContainer>
 
-      <BemVindoScreen />
     </ThemeProvider>
   );
 }

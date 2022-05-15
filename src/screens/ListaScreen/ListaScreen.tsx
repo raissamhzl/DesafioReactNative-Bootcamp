@@ -1,263 +1,59 @@
-import React from "react";
-
+import React, { useState, useEffect } from "react";
+import { FlatList } from "react-native";
 import pokeballBackgroundImage from "../../global/assets/Pokeball-bg-half.png";
-import pokeballCardImage from "../../global/assets/Pokeball.png";
-import dotsCardImage from "../../global/assets/Pattern.png";
-
+import { CardPokemon } from "../../components/CardPokemon";
+import { api } from "../../api";
 import * as S from "./ListaScreen.styles";
+import { NavigationScreenProps } from "../../navigation/types";
 
-export function ListaScreen() {
+type PokemonProps = {
+  id: number;
+  name: string;
+  type: string[];
+}
+
+export function ListaScreen(props: NavigationScreenProps<'ListaScreen'>){
+  const { navigation } = props;
+
+  const renderItem = ({item : {pokemon, index}}) => 
+    <CardPokemon
+      key={index}
+      id={pokemon.id}
+      nome={pokemon.name}
+      tipo={pokemon.type}  
+      onPress={handleNavigation(pokemon.id)}          
+    />
+
+  function handleNavigation(id: number) {
+    navigation.navigate('DetalhesScreen',{id: id});
+  }
+
+  const [listaPokemon, setListaPokemon] = useState<PokemonProps[]>([]);
+
+  useEffect(() => {
+    async function carregarLista() {
+      const response = await api.get('pokemons');
+
+      setListaPokemon(response.data);
+    }
+    carregarLista();
+  }, []);
+
   return (
     <S.Container>
       <S.ContainerBackgroundImage source={pokeballBackgroundImage} />
 
-      <S.ScrollView>
         <S.Title>Pokédex</S.Title>
         <S.Paragraph>Encontre todos os pokémons em um só lugar.</S.Paragraph>
-
+        
         <S.Content>
-          <S.Card activeOpacity={0.9}>
-            <S.CardLeft>
-              <S.CardDotsBackgroundImage source={dotsCardImage} />
-
-              <S.CardPokemonNumber>#001</S.CardPokemonNumber>
-              <S.CardPokemonName>Bulbasaur</S.CardPokemonName>
-
-              <S.CardPokemonTypeList>
-                <S.CardPokemonTypeBadge>
-                  <S.CardPokemonType>Grass</S.CardPokemonType>
-                </S.CardPokemonTypeBadge>
-
-                <S.CardPokemonTypeBadge>
-                  <S.CardPokemonType>Poison</S.CardPokemonType>
-                </S.CardPokemonTypeBadge>
-              </S.CardPokemonTypeList>
-            </S.CardLeft>
-
-            <S.CardRigth>
-              <S.CardPokemonBackgroundImage source={pokeballCardImage} />
-
-              <S.CardPokemonImage
-                source={{
-                  uri: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png`,
-                }}
-              />
-            </S.CardRigth>
-          </S.Card>
-
-          <S.Card activeOpacity={0.9}>
-            <S.CardLeft>
-              <S.CardDotsBackgroundImage source={dotsCardImage} />
-
-              <S.CardPokemonNumber>#002</S.CardPokemonNumber>
-              <S.CardPokemonName>Ivysaur</S.CardPokemonName>
-
-              <S.CardPokemonTypeList>
-                <S.CardPokemonTypeBadge>
-                  <S.CardPokemonType>Grass</S.CardPokemonType>
-                </S.CardPokemonTypeBadge>
-
-                <S.CardPokemonTypeBadge>
-                  <S.CardPokemonType>Poison</S.CardPokemonType>
-                </S.CardPokemonTypeBadge>
-              </S.CardPokemonTypeList>
-            </S.CardLeft>
-
-            <S.CardRigth>
-              <S.CardPokemonBackgroundImage source={pokeballCardImage} />
-
-              <S.CardPokemonImage
-                source={{
-                  uri: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/2.png`,
-                }}
-              />
-            </S.CardRigth>
-          </S.Card>
-
-          <S.Card activeOpacity={0.9}>
-            <S.CardLeft>
-              <S.CardDotsBackgroundImage source={dotsCardImage} />
-
-              <S.CardPokemonNumber>#003</S.CardPokemonNumber>
-              <S.CardPokemonName>Venusaur</S.CardPokemonName>
-
-              <S.CardPokemonTypeList>
-                <S.CardPokemonTypeBadge>
-                  <S.CardPokemonType>Grass</S.CardPokemonType>
-                </S.CardPokemonTypeBadge>
-
-                <S.CardPokemonTypeBadge>
-                  <S.CardPokemonType>Poison</S.CardPokemonType>
-                </S.CardPokemonTypeBadge>
-              </S.CardPokemonTypeList>
-            </S.CardLeft>
-
-            <S.CardRigth>
-              <S.CardPokemonBackgroundImage source={pokeballCardImage} />
-
-              <S.CardPokemonImage
-                source={{
-                  uri: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/3.png`,
-                }}
-              />
-            </S.CardRigth>
-          </S.Card>
-
-          <S.Card activeOpacity={0.9}>
-            <S.CardLeft>
-              <S.CardDotsBackgroundImage source={dotsCardImage} />
-
-              <S.CardPokemonNumber>#004</S.CardPokemonNumber>
-              <S.CardPokemonName>Charmander</S.CardPokemonName>
-
-              <S.CardPokemonTypeList>
-                <S.CardPokemonTypeBadge>
-                  <S.CardPokemonType>Fire</S.CardPokemonType>
-                </S.CardPokemonTypeBadge>
-              </S.CardPokemonTypeList>
-            </S.CardLeft>
-
-            <S.CardRigth>
-              <S.CardPokemonBackgroundImage source={pokeballCardImage} />
-
-              <S.CardPokemonImage
-                source={{
-                  uri: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/4.png`,
-                }}
-              />
-            </S.CardRigth>
-          </S.Card>
-
-          <S.Card activeOpacity={0.9}>
-            <S.CardLeft>
-              <S.CardDotsBackgroundImage source={dotsCardImage} />
-
-              <S.CardPokemonNumber>#005</S.CardPokemonNumber>
-              <S.CardPokemonName>Charmeleon</S.CardPokemonName>
-
-              <S.CardPokemonTypeList>
-                <S.CardPokemonTypeBadge>
-                  <S.CardPokemonType>Fire</S.CardPokemonType>
-                </S.CardPokemonTypeBadge>
-              </S.CardPokemonTypeList>
-            </S.CardLeft>
-
-            <S.CardRigth>
-              <S.CardPokemonBackgroundImage source={pokeballCardImage} />
-
-              <S.CardPokemonImage
-                source={{
-                  uri: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/5.png`,
-                }}
-              />
-            </S.CardRigth>
-          </S.Card>
-
-          <S.Card activeOpacity={0.9}>
-            <S.CardLeft>
-              <S.CardDotsBackgroundImage source={dotsCardImage} />
-
-              <S.CardPokemonNumber>#006</S.CardPokemonNumber>
-              <S.CardPokemonName>Charizard</S.CardPokemonName>
-
-              <S.CardPokemonTypeList>
-                <S.CardPokemonTypeBadge>
-                  <S.CardPokemonType>Fire</S.CardPokemonType>
-                </S.CardPokemonTypeBadge>
-
-                <S.CardPokemonTypeBadge>
-                  <S.CardPokemonType>Flying</S.CardPokemonType>
-                </S.CardPokemonTypeBadge>
-              </S.CardPokemonTypeList>
-            </S.CardLeft>
-
-            <S.CardRigth>
-              <S.CardPokemonBackgroundImage source={pokeballCardImage} />
-
-              <S.CardPokemonImage
-                source={{
-                  uri: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/6.png`,
-                }}
-              />
-            </S.CardRigth>
-          </S.Card>
-
-          <S.Card activeOpacity={0.9}>
-            <S.CardLeft>
-              <S.CardDotsBackgroundImage source={dotsCardImage} />
-
-              <S.CardPokemonNumber>#007</S.CardPokemonNumber>
-              <S.CardPokemonName>Squirtle</S.CardPokemonName>
-
-              <S.CardPokemonTypeList>
-                <S.CardPokemonTypeBadge>
-                  <S.CardPokemonType>Water</S.CardPokemonType>
-                </S.CardPokemonTypeBadge>
-              </S.CardPokemonTypeList>
-            </S.CardLeft>
-
-            <S.CardRigth>
-              <S.CardPokemonBackgroundImage source={pokeballCardImage} />
-
-              <S.CardPokemonImage
-                source={{
-                  uri: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/7.png`,
-                }}
-              />
-            </S.CardRigth>
-          </S.Card>
-
-          <S.Card activeOpacity={0.9}>
-            <S.CardLeft>
-              <S.CardDotsBackgroundImage source={dotsCardImage} />
-
-              <S.CardPokemonNumber>#008</S.CardPokemonNumber>
-              <S.CardPokemonName>Wartortle</S.CardPokemonName>
-
-              <S.CardPokemonTypeList>
-                <S.CardPokemonTypeBadge>
-                  <S.CardPokemonType>Water</S.CardPokemonType>
-                </S.CardPokemonTypeBadge>
-              </S.CardPokemonTypeList>
-            </S.CardLeft>
-
-            <S.CardRigth>
-              <S.CardPokemonBackgroundImage source={pokeballCardImage} />
-
-              <S.CardPokemonImage
-                source={{
-                  uri: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/8.png`,
-                }}
-              />
-            </S.CardRigth>
-          </S.Card>
-
-          <S.Card activeOpacity={0.9}>
-            <S.CardLeft>
-              <S.CardDotsBackgroundImage source={dotsCardImage} />
-
-              <S.CardPokemonNumber>#009</S.CardPokemonNumber>
-              <S.CardPokemonName>Blastoise</S.CardPokemonName>
-
-              <S.CardPokemonTypeList>
-                <S.CardPokemonTypeBadge>
-                  <S.CardPokemonType>Water</S.CardPokemonType>
-                </S.CardPokemonTypeBadge>
-              </S.CardPokemonTypeList>
-            </S.CardLeft>
-
-            <S.CardRigth>
-              <S.CardPokemonBackgroundImage source={pokeballCardImage} />
-
-              <S.CardPokemonImage
-                source={{
-                  uri: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/9.png`,
-                }}
-              />
-            </S.CardRigth>
-          </S.Card>
+          <FlatList
+            data={listaPokemon}
+            renderItem={renderItem}
+            keyExtractor={({id}) => id} 
+            />
         </S.Content>
-      </S.ScrollView>
     </S.Container>
-  );
-}
+  )
+};
+

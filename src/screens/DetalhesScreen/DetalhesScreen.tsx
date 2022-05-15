@@ -1,120 +1,50 @@
-import React from "react";
-import { View } from "react-native";
+import React, { useEffect, useState } from "react";
 
 import pokeballBackgroundImage from "../../global/assets/Pokeball-bg.png";
 import dotsCardImage from "../../global/assets/Pattern.png";
 import backImage from "../../global/assets/Back.png";
+import { CardDetalhes } from "../../components/CardPokemon/DetalhesPokemon";
 
 import * as S from "./DetalhesScreen.styles";
+import { NavigationScreenProps } from "../../navigation/types";
+import { api } from "../../api";
 
-export function DetalhesScreen() {
+type PokemonProps = {
+  id: number;
+  name: string;
+  tipo: string[];
+}
+
+export function DetalhesScreen(props: NavigationScreenProps<'DetalhesScreen'>) {
+  const [pokemon, setDetalhesPokemon] = useState<PokemonProps[]>([]);
+  const { navigation } = props;
+  
+  useEffect(() => {
+    async function CarregarPokemon() {
+        const response = await api.get('pokemons');
+        setDetalhesPokemon(response.data);
+    };
+    CarregarPokemon();
+}, []);
+   
+  function handleNavigation(): void {
+    navigation.navigate('ListaScreen');
+  }
+
   return (
-    <S.Container>
+    <S.Container type={pokemon.tipo[0].toLowerCase()} >
       <S.Header>
         <S.ContainerBackgroundImage source={pokeballBackgroundImage} />
 
         <S.DotsBackgroundImage source={dotsCardImage} />
 
-        <S.GoBackButton>
+        <S.GoBackButton activeOpacity={0.7} onPress={handleNavigation}>
           <S.GoBackImage source={backImage} />
         </S.GoBackButton>
-
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <View>
-            <S.PokemonName>Bulbasaur</S.PokemonName>
-            <S.TypeList>
-              <S.Badge>
-                <S.BadgeText>Grass</S.BadgeText>
-              </S.Badge>
-
-              <S.Badge>
-                <S.BadgeText>Poison</S.BadgeText>
-              </S.Badge>
-            </S.TypeList>
-          </View>
-          <S.PokemonNumber>#001</S.PokemonNumber>
-        </View>
-
-        <S.PokemonImage
-          source={{
-            uri: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png`,
-          }}
-        />
-      </S.Header>
+      </S.Header >
 
       <S.Content>
-        <S.ScrollView>
-          <S.Paragraph>Status</S.Paragraph>
-
-          <S.Status>
-            <S.Type>HP</S.Type>
-            <S.Value>45</S.Value>
-
-            <S.PercentBar>
-              <S.Percent />
-            </S.PercentBar>
-          </S.Status>
-
-          <S.Status>
-            <S.Type>Attack</S.Type>
-            <S.Value>49</S.Value>
-
-            <S.PercentBar>
-              <S.Percent />
-            </S.PercentBar>
-          </S.Status>
-
-          <S.Status>
-            <S.Type>Defense</S.Type>
-            <S.Value>49</S.Value>
-
-            <S.PercentBar>
-              <S.Percent />
-            </S.PercentBar>
-          </S.Status>
-
-          <S.Status>
-            <S.Type>Sp. Atk</S.Type>
-            <S.Value>65</S.Value>
-
-            <S.PercentBar>
-              <S.Percent />
-            </S.PercentBar>
-          </S.Status>
-
-          <S.Status>
-            <S.Type>Sp Def</S.Type>
-            <S.Value>65</S.Value>
-
-            <S.PercentBar>
-              <S.Percent />
-            </S.PercentBar>
-          </S.Status>
-
-          <S.Status>
-            <S.Type>Speed</S.Type>
-            <S.Value>45</S.Value>
-
-            <S.PercentBar>
-              <S.Percent />
-            </S.PercentBar>
-          </S.Status>
-
-          <S.Status>
-            <S.Type>Total</S.Type>
-            <S.Value>318</S.Value>
-
-            <S.PercentBar>
-              <S.Percent />
-            </S.PercentBar>
-          </S.Status>
-        </S.ScrollView>
+      <CardDetalhes id={1} nome={"Bulbasaur"} tipo={[]} HP={0} Attack={0} Defense={0} SpAttack={0} SpDefense={0} Speed={0} />
       </S.Content>
     </S.Container>
   );
