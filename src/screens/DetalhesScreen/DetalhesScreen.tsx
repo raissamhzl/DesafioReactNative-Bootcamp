@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import pokeballBackgroundImage from "../../global/assets/Pokeball-bg.png";
 import dotsCardImage from "../../global/assets/Pattern.png";
 import backImage from "../../global/assets/Back.png";
-import { CardDetalhes } from "../../components/CardPokemon/DetalhesPokemon";
+import { CardDetalhes } from "../../components/DetalhesPokemon";
 
 import * as S from "./DetalhesScreen.styles";
 import { NavigationScreenProps } from "../../navigation/types";
